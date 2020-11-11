@@ -1,0 +1,62 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.4.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'java'
+	id 'org.jetbrains.kotlin.jvm' version '1.3.61'
+}
+
+group = 'ch.treasurekeep'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	jcenter()
+	mavenCentral()
+	flatDir {
+		dirs 'lib'
+	}
+}
+
+dependencies {
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0")
+	implementation 'com.squareup.okhttp3:okhttp:3.8.1'
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0")
+
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation files("lib/TWSAPI.jar")
+	//testImplementation('org.springframework.boot:spring-boot-starter-test') {
+//		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+//	}
+	compile group: 'org.springframework', name: 'spring-web'
+	compile 'org.springframework.boot:spring-boot-starter-web'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.3.5.RELEASE'
+	compile group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	compile group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.3.4.RELEASE'
+	compile group: 'javax.mail', name: 'mail', version: '1.4.4'
+
+	implementation("org.jetbrains.kotlin:kotlin-stdlib:1.4.0") //NO IDEA WHY WE NEED IT just followed https://stackoverflow.com/questions/63603958/classnotfoundexception-kotlin-kotlinnothingvalueexception-using-android-studio
+
+}
+
+jar {
+	enabled = true
+	manifest {
+		attributes(
+				'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+				'Main-Class': 'ch.treasurekeep.KeeperOfTheTreasureApplication'
+		)
+	}
+}
+test {
+	useJUnitPlatform()
+}
+
+compileKotlin {
+	kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+	kotlinOptions.jvmTarget = "1.8"
+}
